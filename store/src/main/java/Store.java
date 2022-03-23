@@ -1,20 +1,21 @@
 import categories.Category;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Store {
 
-    private List<Category> categories;
+    private ArrayList<Category> categories;
 
-    public Store(List<Category> categories) {
+    public Store(ArrayList<Category> categories) {
 
         this.categories = categories;
     }
 
     public String toString() {
-        for(Category item : categories)
+        for(var item : categories)
             System.out.println(item);
-
         return "";
     }
 }

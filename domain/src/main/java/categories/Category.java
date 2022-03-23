@@ -13,7 +13,7 @@ public abstract class Category {
     public Category(String name) {
 
         this.name = name;
-        products = new ArrayList<Product>();
+        products = new ArrayList<>();
     }
 
     public String getNameCategory() {
