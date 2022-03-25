@@ -32,7 +32,7 @@ Store functionality should be based on above principles.
 Classes to create:
 
 - `Product` with such attributes as [name, rate, price]
-- `Category` classes with the name attribute, for each store category [bike, phone, milk] and products list
+- `categories.Category` classes with the name attribute, for each store category [bike, phone, milk] and products list
 - `Store` - class that should handle category list
 - `RandomStorePopulator` - utility class that will populate out store/category with fake data using `Faker` lib
 - `StoreApp` - class with main method to execute our store scenario.
