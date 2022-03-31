@@ -4,6 +4,7 @@ import org.reflections.Reflections;
 import product.Product;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Set;
 import static org.reflections.scanners.Scanners.SubTypes;
 
@@ -45,7 +46,13 @@ public class StoreHelper {
 
         for (var category: categories) {
             var categoryInstance = (Category)category.getDeclaredConstructor().newInstance();
-            categoryInstance.addProductCategory(createProduct(getName(categoryInstance.getNameCategory())));
+
+            Random random = new Random();
+            int count = random.nextInt(20);
+
+            for (var i = 0; i < count; i++) {
+                categoryInstance.addProductCategory(createProduct(getName(categoryInstance.getNameCategory())));
+            }
             categoryList.add(categoryInstance);
         }
 
