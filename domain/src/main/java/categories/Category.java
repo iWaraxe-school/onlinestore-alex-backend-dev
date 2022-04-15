@@ -32,4 +32,8 @@ public abstract class Category {
 
         return "";
     }
+
+    public List<Product> getProducts(){
+        return products;
+    }
 }

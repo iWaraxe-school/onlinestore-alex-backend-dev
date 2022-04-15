@@ -1,8 +1,8 @@
 import categories.Category;
+import product.Product;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class Store {
 
@@ -17,5 +17,20 @@ public class Store {
         for(var item : categories)
             System.out.println(item);
         return "";
+    }
+
+    public void printListProducts(List<Product> products) {
+        for(var item : products)
+            System.out.println(item);
+    }
+
+    public List<Product> getListOfAllProducts(){
+        List<Product> products = new ArrayList<Product>();
+
+        for(var item : categories){
+            products.addAll(item.getProducts());
+        }
+
+        return  products;
     }
 }

@@ -1,50 +1,46 @@
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Locale;
 import java.util.Scanner;
-import org.xml.sax.SAXException;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 public class StoreApp {
 
-    public static void main(String[] args) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, ParserConfigurationException, SAXException, IOException {
+    public static void main(String[] args) {
 
-        RandomStorePopulator randomStorePopulator = new RandomStorePopulator(new StoreHelper());
-        var storeCreation = randomStorePopulator.createStore();
-        System.out.println(storeCreation);
+        try {
+            var sh = new StoreHelper();
+            RandomStorePopulator randomStorePopulator = new RandomStorePopulator(sh);
+            var store = randomStorePopulator.createStore();
 
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        SAXParser parser = factory.newSAXParser();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        XMLParser handler = new XMLParser();
-        parser.parse(new File("consoleApp/src/main/resources/config.xml"), handler);
+            Boolean flag = true;
+            while (flag) {
 
-        var resultHandler = handler.getSort();
+                System.out.println("Please, enter one of the commands: sort/top/quit:");
+                String command = reader.readLine();
 
-        while (true) {
-            Scanner scanner = new Scanner(System.in);
-            String input = scanner.nextLine();
+                System.out.println("Your command is : " + command);
 
-            switch (input.toLowerCase(Locale.ROOT)) {
-                case "sort":
-                    System.out.println("sort was called");
-                    break;
+                switch (command.toLowerCase(Locale.ROOT)) {
+                    case "sort":
+                        store.printListProducts(sh.sortAllProducts());
+                        break;
 
-                case "top" :
-                    System.out.println("top was called");
-                    break;
+                    case "top":
+                        store.printListProducts(sh.getTop5());
+                        break;
 
-                case "quit" :
-                    System.out.println("quit was called");
-                    return;
+                    case "quit":
+                        flag = false;
+                        break;
 
-                default:
-                    System.out.println("incorrect command");
-                    break;
+                    default:
+                        System.out.println("Incorrect command");
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Error: the exception was thrown:" + e.getMessage());
         }
     }
 }
