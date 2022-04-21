@@ -1,14 +1,15 @@
-import java.lang.reflect.InvocationTargetException;
-
 public class RandomStorePopulator {
+    private static StoreHelper storeHelper;
 
-    private StoreHelper storeHelper;
+    public static StoreHelper getRandomStorePopulator() {
+        if (storeHelper == null) {
+            storeHelper = new StoreHelper();
+        }
 
-    public RandomStorePopulator(StoreHelper storeHelper) {
-        this.storeHelper = storeHelper;
+        return storeHelper;
     }
 
-    public Store createStore() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        return storeHelper.createStore();
+    private RandomStorePopulator() {
+
     }
 }
