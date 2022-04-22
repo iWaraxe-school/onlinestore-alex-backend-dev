@@ -8,10 +8,8 @@ public class StoreApp {
     public static void main(String[] args) {
 
         try {
-            var sh = new StoreHelper();
-            RandomStorePopulator randomStorePopulator = new RandomStorePopulator(sh);
-            var store = randomStorePopulator.createStore();
-
+            StoreHelper storeHelper = RandomStorePopulator.getRandomStorePopulator();
+            var store = storeHelper.createStore();
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
             Boolean flag = true;
@@ -24,11 +22,11 @@ public class StoreApp {
 
                 switch (command.toLowerCase(Locale.ROOT)) {
                     case "sort":
-                        store.printListProducts(sh.sortAllProducts());
+                        store.printListProducts(storeHelper.sortAllProducts());
                         break;
 
                     case "top":
-                        store.printListProducts(sh.getTop5());
+                        store.printListProducts(storeHelper.getTop5());
                         break;
 
                     case "quit":
