@@ -15,7 +15,7 @@ public class StoreApp {
             Boolean flag = true;
             while (flag) {
 
-                System.out.println("Please, enter one of the commands: sort/top/quit:");
+                System.out.println("Please, enter one of the commands: sort/top/quit/create order:");
                 String command = reader.readLine();
 
                 System.out.println("Your command is : " + command);
@@ -31,6 +31,10 @@ public class StoreApp {
 
                     case "quit":
                         flag = false;
+                        break;
+
+                    case "create order":
+                        storeHelper.createOrder(store.getListOfAllProducts().stream().findFirst().orElse(null).getNameProduct());
                         break;
 
                     default:
