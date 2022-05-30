@@ -1,11 +1,14 @@
 public class RandomStorePopulator {
-    private static StoreHelper storeHelper;
+    private volatile static StoreHelper storeHelper;
 
     public static StoreHelper getRandomStorePopulator() {
         if (storeHelper == null) {
-            storeHelper = new StoreHelper();
+            synchronized (RandomStorePopulator.class) {
+                if (storeHelper == null) {
+                    storeHelper = new StoreHelper();
+                }
+            }
         }
-
         return storeHelper;
     }
 

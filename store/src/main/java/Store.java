@@ -7,10 +7,12 @@ import java.util.List;
 public class Store {
 
     private ArrayList<Category> categories;
+    private ArrayList<Product> purchasedProducts;
 
     public Store(ArrayList<Category> categories) {
 
         this.categories = categories;
+        purchasedProducts = new ArrayList<>();
     }
 
     public String toString() {
@@ -32,5 +34,9 @@ public class Store {
         }
 
         return  products;
+    }
+
+    public List<Product> getPurchasedProductList() {
+        return purchasedProducts;
     }
 }

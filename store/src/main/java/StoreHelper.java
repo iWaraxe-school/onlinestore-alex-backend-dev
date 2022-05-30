@@ -2,18 +2,24 @@ import XMLWorker.XMLReader;
 import categories.Category;
 import com.github.javafaker.Faker;
 import comporator.ProductComparator;
+import lombok.SneakyThrows;
 import sorttypes.OrderSort;
 import org.reflections.Reflections;
 import product.Product;
 import javax.xml.parsers.ParserConfigurationException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import static org.reflections.scanners.Scanners.SubTypes;
 
 public class StoreHelper {
 
     private Faker faker;
     private Store store;
+
+    public ExecutorService executorService = Executors.newFixedThreadPool(3);
 
     public StoreHelper() {
         faker = new Faker();
@@ -96,5 +102,38 @@ public class StoreHelper {
         List<Product> top5 = new ArrayList<>(sortedList.subList(0, 5));
 
         return top5;
+    }
+
+    @SneakyThrows
+    public void createOrder(String productName) {
+
+        System.out.printf(Thread.currentThread().getName());
+        Product orderedProduct = getOrderedProduct(productName);
+        if(orderedProduct !=null) {
+            int threadTime = new Random().nextInt(30);
+            executorService.execute(() -> {
+                try {
+                    System.out.printf("Starting order ", Thread.currentThread().getName());
+                    store.getPurchasedProductList().add(orderedProduct);
+                    store.printListProducts(store.getPurchasedProductList());
+                    Thread.sleep(threadTime * 1000);
+                    System.out.printf("Finishing order ", Thread.currentThread().getName());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+            System.out.println("createOrder() is finished " + Thread.currentThread().getName());
+        }else {
+            System.out.println("createOrder() is finished because orderProducts is not correct ");
+        }
+    }
+
+    public void shutdownThreads(){
+        executorService.shutdown();
+    }
+
+    private Product getOrderedProduct(String productName)
+    {
+        return store.getListOfAllProducts().stream().parallel().filter(x -> x.name.equals(productName)).findFirst().orElse(null);
     }
 }
