@@ -114,7 +114,7 @@ public class StoreHelper {
             executorService.execute(() -> {
                 try {
                     System.out.printf("Starting order ", Thread.currentThread().getName());
-                    store.getPurchasedProductList().add(orderedProduct);
+                    store.addPurchasedProductList(orderedProduct);
                     store.printListProducts(store.getPurchasedProductList());
                     Thread.sleep(threadTime * 1000);
                     System.out.printf("Finishing order ", Thread.currentThread().getName());
