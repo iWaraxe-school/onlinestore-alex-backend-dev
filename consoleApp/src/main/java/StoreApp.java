@@ -1,7 +1,8 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Locale;
-import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class StoreApp {
 
@@ -10,6 +11,17 @@ public class StoreApp {
         try {
             StoreHelper storeHelper = RandomStorePopulator.getRandomStorePopulator();
             var store = storeHelper.createStore();
+
+            Timer timer = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    store.clearPurchasedProductList();
+                }
+            };
+
+            timer.scheduleAtFixedRate(timerTask, 0, 120000);
+
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
             Boolean flag = true;
@@ -31,12 +43,21 @@ public class StoreApp {
 
                     case "quit":
                         flag = false;
+                        storeHelper.shutdownThreads();
                         break;
 
                     case "create order":
                         storeHelper.createOrder(store.getListOfAllProducts().stream().findFirst().orElse(null).getNameProduct());
                         break;
 
+                    case "status":
+                        var list = store.getPurchasedProductList();
+                        if(list.size() == 0){
+                            System.out.println("Purchase is 0");
+                        }else {
+                            store.printListProducts(list);
+                        }
+                        break;
                     default:
                         System.out.println("Incorrect command");
                 }

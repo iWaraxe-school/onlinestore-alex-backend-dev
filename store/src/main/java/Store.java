@@ -39,4 +39,15 @@ public class Store {
     public List<Product> getPurchasedProductList() {
         return purchasedProducts;
     }
+
+    public void addPurchasedProductList(Product product) {
+        purchasedProducts.add(product);
+        System.out.println("Product was added");
+    }
+
+    public void clearPurchasedProductList()
+    {
+        purchasedProducts.clear();
+        System.out.println("Purchased products were clear");
+    }
 }
