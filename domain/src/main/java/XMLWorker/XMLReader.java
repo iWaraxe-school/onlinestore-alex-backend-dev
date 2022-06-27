@@ -10,7 +10,7 @@ import java.util.LinkedHashMap;
 
 public class XMLReader {
 
-    private String configFilePath = "onlinestore-alex-backend-dev/consoleApp/src/main/resources/config.xml";
+    private String configFilePath = "C:/Users/AlexanderUlyanitsky/Desktop/Clone Last Folder/onlinestore-alex-backend-dev/domain/src/main/java/XMLWorker/config.xml";
 
     public LinkedHashMap<String,String> XMLRead() throws ParserConfigurationException, SAXException, IOException {
 
