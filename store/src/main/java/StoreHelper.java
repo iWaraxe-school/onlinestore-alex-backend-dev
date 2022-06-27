@@ -136,4 +136,16 @@ public class StoreHelper {
     {
         return store.getListOfAllProducts().stream().parallel().filter(x -> x.name.equals(productName)).findFirst().orElse(null);
     }
+
+    public void setTimer() {
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                store.clearPurchasedProductList();
+            }
+        };
+
+        timer.scheduleAtFixedRate(timerTask, 0, 120000);
+    }
 }

@@ -1,5 +1,9 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -11,16 +15,18 @@ public class StoreApp {
         try {
             StoreHelper storeHelper = RandomStorePopulator.getRandomStorePopulator();
             var store = storeHelper.createStore();
+            storeHelper.setTimer();
 
-            Timer timer = new Timer();
-            TimerTask timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    store.clearPurchasedProductList();
-                }
-            };
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jdbc_online_shop", "root", "110411Sss");
+            Statement statement = connection.createStatement();
 
-            timer.scheduleAtFixedRate(timerTask, 0, 120000);
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM categories");
+
+            while(resultSet.next()) {
+                System.out.println(resultSet.getString("categoriescol"));
+            }
+
+            connection.close();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
