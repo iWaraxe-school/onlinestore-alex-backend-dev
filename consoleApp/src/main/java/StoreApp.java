@@ -17,17 +17,6 @@ public class StoreApp {
             var store = storeHelper.createStore();
             storeHelper.setTimer();
 
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jdbc_online_shop", "root", "110411Sss");
-            Statement statement = connection.createStatement();
-
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM categories");
-
-            while(resultSet.next()) {
-                System.out.println(resultSet.getString("categoriescol"));
-            }
-
-            connection.close();
-
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
             Boolean flag = true;
