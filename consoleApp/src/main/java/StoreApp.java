@@ -14,6 +14,8 @@ public class StoreApp {
 
         try {
             StoreHelper storeHelper = RandomStorePopulator.getRandomStorePopulator();
+            DBHelper dbHelper = new DBHelper();
+            DBPopulator dbPopulator = new DBPopulator();
             var store = storeHelper.createStore();
             storeHelper.setTimer();
 
@@ -44,6 +46,11 @@ public class StoreApp {
                     case "create order":
                         storeHelper.createOrder(store.getListOfAllProducts().stream().findFirst().orElse(null).getNameProduct());
                         break;
+
+                    case "db execution":
+                        dbHelper.getConnectionToDB();
+                        dbPopulator.fillDbByFaker();
+                        dbHelper.dispose();
 
                     case "status":
                         var list = store.getPurchasedProductList();
