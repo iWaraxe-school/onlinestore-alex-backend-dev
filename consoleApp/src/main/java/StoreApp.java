@@ -1,12 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class StoreApp {
 
@@ -14,8 +8,7 @@ public class StoreApp {
 
         try {
             StoreHelper storeHelper = RandomStorePopulator.getRandomStorePopulator();
-            DBHelper dbHelper = new DBHelper();
-            DBPopulator dbPopulator = new DBPopulator();
+            DBHelper dbHelper = new DBHelper(storeHelper);
             var store = storeHelper.createStore();
             storeHelper.setTimer();
 
@@ -48,18 +41,14 @@ public class StoreApp {
                         break;
 
                     case "db execution":
-                        dbHelper.getConnectionToDB();
-                        dbPopulator.fillDbByFaker();
-                        dbHelper.dispose();
-
-                    case "status":
-                        var list = store.getPurchasedProductList();
-                        if(list.size() == 0){
-                            System.out.println("Purchase is 0");
-                        }else {
-                            store.printListProducts(list);
-                        }
+                        dbHelper.setConnectionToDB();
+                        dbHelper.clearDB();
+                        dbHelper.createCategoryTable();
+                        dbHelper.createProductTable();
+                        dbHelper.fillStoreRandomly();
+                        dbHelper.printFilledStore();
                         break;
+
                     default:
                         System.out.println("Incorrect command");
                 }

@@ -18,6 +18,7 @@ public class StoreHelper {
 
     private Faker faker;
     private Store store;
+    private Product product = null;
 
     public ExecutorService executorService = Executors.newFixedThreadPool(3);
 
@@ -147,5 +148,17 @@ public class StoreHelper {
         };
 
         timer.scheduleAtFixedRate(timerTask, 0, 120000);
+    }
+
+    public Double getRate() {
+        return product.getRate();
+    }
+
+    public Double getPrice() {
+        return product.getPrice();
+    }
+
+    public String getNameProduct(String nameCategory) {
+        return product.getNameProduct();
     }
 }
