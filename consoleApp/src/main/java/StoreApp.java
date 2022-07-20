@@ -41,12 +41,7 @@ public class StoreApp {
                         break;
 
                     case "db execution":
-                        dbHelper.setConnectionToDB();
-                        dbHelper.clearDB();
-                        dbHelper.createCategoryTable();
-                        dbHelper.createProductTable();
-                        dbHelper.fillStoreRandomly();
-                        dbHelper.printFilledStore();
+                        dbHelper.dbExecution();
                         break;
 
                     default:

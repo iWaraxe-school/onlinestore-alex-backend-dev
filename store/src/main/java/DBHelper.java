@@ -24,34 +24,33 @@ public class DBHelper {
         this.storeHelper = storeHelper;
     }
 
-    public void setConnectionToDB() {
+    private void setConnectionToDB() {
         try {
+            Class.forName("com.mysql.jdbc.Driver");
             CONNECTION = DriverManager.getConnection(DB_URL, USER, PASS);
             System.out.println("\nDatabase connection successfull\n");
             STATEMENT = CONNECTION.createStatement();
         } catch (SQLException exception) {
             System.out.println("Problems with DB connection");
             throw new RuntimeException(exception);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void clearDB() {
-        //String alterTableCategories = "ALTER TABLE CATEGORIES";
-        //String dropConstraint = "DROP Constraint products_categories_fk";
+    private void clearDB() {
         String queryDropCategoriesTable = "DROP TABLE IF EXISTS CATEGORIES;";
         String queryDropProductsTable = "DROP TABLE IF EXISTS PRODUCTS;";
         try {
-            //STATEMENT.executeUpdate(alterTableCategories);
-            //STATEMENT.executeUpdate(dropConstraint);
-            STATEMENT.executeUpdate(queryDropCategoriesTable);
             STATEMENT.executeUpdate(queryDropProductsTable);
+            STATEMENT.executeUpdate(queryDropCategoriesTable);
         } catch (SQLException exception){
             System.out.println("Problems with cleaning of DB tables");
             throw new RuntimeException(exception);
         }
     }
 
-    public void createCategoryTable() {
+    private void createCategoryTable() {
         String queryCreateCategoryTable = "CREATE TABLE IF NOT EXISTS CATEGORIES (" +
                 "ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL," +
                 "NAME VARCHAR(255) NOT NULL);";
@@ -63,7 +62,7 @@ public class DBHelper {
         }
     }
 
-    public void createProductTable() {
+    private void createProductTable() {
         String queryCreateProductTable = "CREATE TABLE IF NOT EXISTS PRODUCTS (" +
                 "ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL," +
                 "CATEGORY_ID INT NOT NULL," +
@@ -89,51 +88,43 @@ public class DBHelper {
         ArrayList<Category> categoryList = new ArrayList<>();
 
         for (var category: categorySet) {
-            var categoryInstance = (Category)category.getDeclaredConstructor().newInstance();
-
-            Random random = new Random();
-            int count = random.nextInt(5, 20);
-
-            for (var i = 0; i < count; i++) {
-                categoryInstance.addProductCategory(storeHelper.createProduct(storeHelper.getName(categoryInstance.getNameCategory())));
-            }
-            categoryList.add(categoryInstance);
-        }
-
-        for(var category : categoryList) {
-            System.out.println("Inserting category " + category.getNameCategory() + " into database");
+            var categoryInstance = (Category) category.getDeclaredConstructor().newInstance();
             try {
                 PreparedStatement insertCategories = CONNECTION.prepareStatement("INSERT INTO CATEGORIES(NAME) VALUES(?)");
-                insertCategories.setString(1, category.getNameCategory());
+                insertCategories.setString(1, categoryInstance.getNameCategory());
                 insertCategories.execute();
 
                 PreparedStatement findCategoryID = CONNECTION.prepareStatement("SELECT ID FROM CATEGORIES WHERE NAME = ?");
-                findCategoryID.setString(1, category.getNameCategory());
+                findCategoryID.setString(1, categoryInstance.getNameCategory());
                 RESULTSET = findCategoryID.executeQuery();
 
                 Integer id = 0;
-                while(RESULTSET.next()) {
+                while (RESULTSET.next()) {
                     id = RESULTSET.getInt("ID");
                 }
 
-                Random randomProductAmountToAdd = new Random();
-                for (int i = 0; i < randomProductAmountToAdd.nextInt(15) + 1; i++) {
+                Random random = new Random();
+                int count = random.nextInt(5, 20);
+
+                for (var i = 0; i < count; i++) {
+                    Product product = storeHelper.createProduct(storeHelper.getName(categoryInstance.getNameCategory()));
                     PreparedStatement insertProduct = CONNECTION.prepareStatement("INSERT INTO PRODUCTS(category_id, name, rate, price) VALUES(?, ?, ?, ?)");
                     insertProduct.setInt(1, id);
-                    insertProduct.setString(2, storeHelper.getNameProduct(category.getNameCategory()));
-                    insertProduct.setDouble(3, storeHelper.getRate());
-                    insertProduct.setDouble(4, storeHelper.getPrice());
+                    insertProduct.setString(2, product.getNameProduct());
+                    insertProduct.setDouble(3, product.getRate());
+                    insertProduct.setDouble(4, product.getPrice());
                     System.out.println(insertProduct);
                     insertProduct.execute();
                     System.out.println("One more product inserted");
                 }
-            }catch (SQLException exception) {
+                categoryList.add(categoryInstance);
+            } catch (SQLException exception) {
                 throw new RuntimeException(exception);
             }
         }
     }
 
-    public void printFilledStore() {
+    private void printFilledStore() {
         try {
             System.out.println("\nPrint Store from DataBase\n");
             RESULTSET = STATEMENT.executeQuery("SELECT * FROM CATEGORIES");
@@ -157,10 +148,26 @@ public class DBHelper {
         }
     } catch (Exception exception) {
         exception.printStackTrace();
+        }
+    }
+
+    public void dbExecution() {
+        setConnectionToDB();
+        clearDB();
+        createCategoryTable();
+        createProductTable();
+        try {
+            fillStoreRandomly();
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        printFilledStore();
     }
 }
 
-
-
-
-}
