@@ -7,7 +7,7 @@ import java.util.List;
 
 public abstract class Category {
 
-    private String name;
+    public String name;
     protected List<Product> products;
 
     public Category(String name) {
