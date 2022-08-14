@@ -1,6 +1,9 @@
+package storage;
+
 import categories.Category;
 import org.reflections.Reflections;
 import product.Product;
+import storage.StoreHelper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
@@ -126,7 +129,7 @@ public class DBHelper {
 
     private void printFilledStore() {
         try {
-            System.out.println("\nPrint Store from DataBase\n");
+            System.out.println("\nPrint storage.Store from DataBase\n");
             RESULTSET = STATEMENT.executeQuery("SELECT * FROM CATEGORIES");
 
             System.out.println("List of Categories");
@@ -149,6 +152,11 @@ public class DBHelper {
     } catch (Exception exception) {
         exception.printStackTrace();
         }
+    }
+
+    public void getAllCategories() throws SQLException {
+        String allCategories = "SELECT * FROM CATEGORIES";
+        RESULTSET = STATEMENT.executeQuery(allCategories);
     }
 
     public void dbExecution() {

@@ -11,8 +11,6 @@ public class AppHttpServer {
     public static final String USERNAME = "admin";
     public static final String PASSWORD = "password";
 
-    //Execution of the server
-
     public void startServer() {
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
@@ -25,7 +23,6 @@ public class AppHttpServer {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
-
 
     private void createContext(HttpServer server, String path, HttpHandler handler) {
         server.createContext(path, handler).setAuthenticator(new BasicAuthenticator("test") {

@@ -1,3 +1,5 @@
+import storage.StoreHelper;
+
 public class RandomStorePopulator {
     private volatile static StoreHelper storeHelper;
 

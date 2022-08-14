@@ -1,3 +1,5 @@
+package storage;
+
 import XMLWorker.XMLReader;
 import categories.Category;
 import com.github.javafaker.Faker;
@@ -6,6 +8,8 @@ import lombok.SneakyThrows;
 import sorttypes.OrderSort;
 import org.reflections.Reflections;
 import product.Product;
+import storage.Store;
+
 import javax.xml.parsers.ParserConfigurationException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -16,8 +20,8 @@ import static org.reflections.scanners.Scanners.SubTypes;
 
 public class StoreHelper {
 
-    private Faker faker;
-    private Store store;
+    private static Faker faker;
+    private static Store store;
     private Product product = null;
 
     public ExecutorService executorService = Executors.newFixedThreadPool(3);
@@ -26,7 +30,7 @@ public class StoreHelper {
         faker = new Faker();
     }
 
-    public Product createProduct(String name) {
+    public static Product createProduct(String name) {
 
         Double rate = Double.parseDouble(faker.commerce().price().replace(',','.'));
         Double price = Double.parseDouble(faker.commerce().price().replace(',', '.'));
@@ -34,7 +38,7 @@ public class StoreHelper {
         return new Product(name, rate, price);
     }
 
-    public String getName(String categoryName) throws IllegalAccessException {
+    public static String getName(String categoryName) throws IllegalAccessException {
         switch(categoryName) {
             case "Food":
                 return faker.food().sushi();
@@ -45,29 +49,35 @@ public class StoreHelper {
         }
     }
 
-    public Store createStore() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public static Store createStore() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
-        Reflections reflections = new Reflections("categories");
+        if (store == null) {
+            Reflections reflections = new Reflections("categories");
 
-        Set<Class<?>> categories =
-                reflections.get(SubTypes.of(Category.class).asClass());
+            Set<Class<?>> categories =
+                    reflections.get(SubTypes.of(Category.class).asClass());
 
-        ArrayList<Category> categoryList = new ArrayList<>();
+            ArrayList<Category> categoryList = new ArrayList<>();
 
-        for (var category: categories) {
-            var categoryInstance = (Category)category.getDeclaredConstructor().newInstance();
+            for (var category: categories) {
+                var categoryInstance = (Category)category.getDeclaredConstructor().newInstance();
 
-            Random random = new Random();
-            int count = random.nextInt(5, 20);
+                Random random = new Random();
+                int count = random.nextInt(5, 20);
 
-            for (var i = 0; i < count; i++) {
-                categoryInstance.addProductCategory(createProduct(getName(categoryInstance.getNameCategory())));
+                for (var i = 0; i < count; i++) {
+                    categoryInstance.addProductCategory(createProduct(getName(categoryInstance.getNameCategory())));
+                }
+                categoryList.add(categoryInstance);
             }
-            categoryList.add(categoryInstance);
+
+            store = new Store(categoryList);
+            return store;
         }
 
-        store = new Store(categoryList);
-        return store;
+        else {
+            return store;
+        }
     }
 
     public List<Product> sortAllProducts() throws Exception {
