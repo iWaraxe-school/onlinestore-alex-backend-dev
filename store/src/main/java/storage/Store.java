@@ -1,3 +1,5 @@
+package storage;
+
 import categories.Category;
 import product.Product;
 

@@ -9,7 +9,7 @@
 [RestAssured](https://rest-assured.io/)
 #### Task #8
 
-The same task as previous, but to store and get store data you should 
+The same task as previous, but to storage and get storage data you should 
 - implement an HTTP server (use included in java or external lib), that will handle in memory or DB your categories, but you will receive them via HTTP protocol.
 - Also, you should implement `add the product to cart` logic in this server, and process this request via HTTP.
 - Finally, your HTTP service should be secured with basic authentication  (credentials can be hardcoded).
