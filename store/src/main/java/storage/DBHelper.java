@@ -1,6 +1,7 @@
 package storage;
 
 import categories.Category;
+import com.github.javafaker.Cat;
 import org.reflections.Reflections;
 import product.Product;
 import storage.StoreHelper;
@@ -8,6 +9,7 @@ import storage.StoreHelper;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -154,9 +156,21 @@ public class DBHelper {
         }
     }
 
-    public void getAllCategories() throws SQLException {
+    public List<Category> getAllCategories() throws SQLException {
+        List<Category> categories = new ArrayList<>();
         String allCategories = "SELECT * FROM CATEGORIES";
-        RESULTSET = STATEMENT.executeQuery(allCategories);
+
+        Statement stmt;
+        stmt = CONNECTION.createStatement();
+        stmt.execute(allCategories);
+
+        ResultSet rs = stmt.getResultSet();
+
+        while(rs.next()) {
+            categories.add(new Category(rs.getString("category")));
+        }
+
+        return categories;
     }
 
     public void dbExecution() {
