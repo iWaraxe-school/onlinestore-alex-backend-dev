@@ -5,7 +5,7 @@ import product.Product;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Category {
+public class Category {
 
     public String name;
     protected List<Product> products;

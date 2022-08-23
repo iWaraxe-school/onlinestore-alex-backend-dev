@@ -30,6 +30,7 @@ public class StoreHelper {
         faker = new Faker();
     }
 
+
     public static Product createProduct(String name) {
 
         Double rate = Double.parseDouble(faker.commerce().price().replace(',','.'));
@@ -52,6 +53,7 @@ public class StoreHelper {
     public static Store createStore() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
         if (store == null) {
+            faker = new Faker();
             Reflections reflections = new Reflections("categories");
 
             Set<Class<?>> categories =
@@ -158,17 +160,5 @@ public class StoreHelper {
         };
 
         timer.scheduleAtFixedRate(timerTask, 0, 120000);
-    }
-
-    public Double getRate() {
-        return product.getRate();
-    }
-
-    public Double getPrice() {
-        return product.getPrice();
-    }
-
-    public String getNameProduct(String nameCategory) {
-        return product.getNameProduct();
     }
 }
